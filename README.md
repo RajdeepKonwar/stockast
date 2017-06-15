@@ -1,7 +1,8 @@
-# stockast
-Stock Market Forecasting using Parallel Monte-Carlo Simulations and Machine Learning
+# Stockast
+## Stock Market Forecasting using Parallel Monte-Carlo Simulations and Machine Learning
+------
 
-########## COMPILE INSTRUCTIONS ##########
+### COMPILE INSTRUCTIONS
 To run stockast.cpp, run the following commands in your linux terminal:
 (Steps 3 & 4 required only if you're missing the file "gnuplot-iostream.h")
   1. gcc version 6.3.0 or higher
@@ -11,7 +12,7 @@ To run stockast.cpp, run the following commands in your linux terminal:
         sudo apt install gcc-6
         sudo apt install g++-6
         sudo update-alternatives --instal /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ /usr/bin/g++-6
-    b. OTHERS: (Without root privileges. Also, add the last 3 instruction lines to the end of ~/.bashrc)
+    b. OTHERS: (Without root privileges. Also, add the last 3 instruction lines to the end of \~/.bashrc)
                (eg: on Comet where one does not have root privileges)
         wget https://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
         tar -xvzf gcc-6.3.0.tar.gz
@@ -45,13 +46,13 @@ To run stockast.cpp, run the following commands in your linux terminal:
         git clone https://github.com/dstahlke/gnuplot-iostream.git
         then copy "gnuplot-iostream.h" to run dir
 
-########## RUN INSTRUCTIONS ##########
+### RUN INSTRUCTIONS
 (Local): g++ stockast.cpp -o stockast -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 (comet): g++ stockast.cpp -o stockast -I /path/to/boost-build/include -L /path/to/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 Then,
   ./stockast 1    (1 to plot the outcome/0 to suppress plot)
 
-### To run machine_learning_rnn.py ###
+### To run machine_learning_rnn.py
   Python 2 or 3
   numpy
   pandas
@@ -59,6 +60,7 @@ Then,
   TensorFlow - 1.0.0
   Scikit-Learn
 
+### General info
 The file "data.csv" contains the original stock-price returns taken from the market.
 The file "ml_data.csv" contains the machine-learning predicted stock-price values for the 3 hours.
 The file "opt.csv" contains the output (most likely outcome) price-vector from our code.
