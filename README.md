@@ -12,7 +12,7 @@ To run stockast.cpp, run the following commands in your linux terminal:
         sudo apt install g++-6
         sudo update-alternatives --instal /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ /usr/bin/g++-6
     b. OTHERS: (Without root privileges. Also, add the last 3 instruction lines to the end of \~/.bashrc)
-               (eg: on Comet where one does not have root privileges)
+               (eg: eg: on a remote machine via ssh)
         wget https://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
         tar -xvzf gcc-6.3.0.tar.gz
         cd gcc-6.3.0
@@ -30,7 +30,7 @@ To run stockast.cpp, run the following commands in your linux terminal:
         sudo apt-get update
         sudo apt-get install libboost-all-dev
     b. OTHERS: (without root privileges. Add the last instruction line to end of ~/.bashrc)
-               (eg: on Comet where one does not have root privileges)
+               (eg: on a remote machine via ssh)
         wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
         tar -xvzf boost_1_64_0.tar.gz
         mkdir boost-build
@@ -47,7 +47,8 @@ To run stockast.cpp, run the following commands in your linux terminal:
 
 ### RUN INSTRUCTIONS
 (Local): g++ stockast.cpp -o stockast -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
-(comet): g++ stockast.cpp -o stockast -I /path/to/boost-build/include -L /path/to/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
+
+(Remote): g++ stockast.cpp -o stockast -I /path/to/boost-build/include -L /path/to/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 Then,
   ./stockast 1    (1 to plot the outcome/0 to suppress plot)
 
