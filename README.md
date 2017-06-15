@@ -1,6 +1,5 @@
 # Stockast
 ## Stock Market Forecasting using Parallel Monte-Carlo Simulations and Machine Learning
-------
 
 ### COMPILE INSTRUCTIONS
 To run stockast.cpp, run the following commands in your linux terminal:
