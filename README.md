@@ -21,7 +21,7 @@
       ../gcc-6.3.0/configure --disable-multilib -v --prefix=path/to/gcc-6.3.0  
       make  
       make install  
-      export PATH=~/gcc-6.3.0/bin/:$PATH  
+      export PATH=path/to/gcc-6.3.0/bin/:$PATH  
       export LD_LIBRARY_PATH=path/to/gcc-6.3.0/lib:$LD_LIBRARY_PATH  
       export LD_LIBRARY_PATH=path/to/gcc-6.3.0/lib64:$LD_LIBRARY_PATH  
 2. Boost 1.64.0 or higher  
