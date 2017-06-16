@@ -62,4 +62,4 @@ Scikit-Learn
 The file "data.csv" contains the original stock-price returns taken from the market.  
 The file "ml_data.csv" contains the machine-learning predicted stock-price values for the 3 hours.  
 The file "opt.csv" contains the output (most likely outcome) price-vector from our code.  
-The script "profiling.sh" runs the parallel code from 1 to max.no. of threads and displays walltimes for each while suppressing any plots (i.e. ./stockast 0 option
+The script "profiling.sh" runs the parallel code from 1 to max.no. of threads and displays walltimes for each while suppressing any plots (i.e. ./stockast 0 option)
