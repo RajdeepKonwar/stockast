@@ -3,14 +3,15 @@
 
 ### Requirements
 (Steps 3 & 4 required only if you're missing the file "gnuplot-iostream.h")
-1. gcc version 6.3.0 or higher
+1. gcc version 6.3.0 or higher  
   a. UBUNTU: (Requires root privileges) (eg: on an Ubuntu laptop)  
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test  
       sudo apt update  
       sudo apt install gcc-6  
       sudo apt install g++-6  
       sudo update-alternatives --instal /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ /usr/bin/g++-6  
-  b. OTHERS: (Without root privileges. Also, add the last 3 instruction lines to the end of \~/.bashrc) (eg: eg: on a remote machine via ssh)  
+  b. OTHERS: (Without root privileges. Also, add the last 3 instruction lines to the end of \~/.bashrc)  
+  (eg: eg: on a remote machine via ssh)  
       wget https://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz  
       tar -xvzf gcc-6.3.0.tar.gz  
       cd gcc-6.3.0  
@@ -27,7 +28,8 @@
   a. UBUNTU: (Requires root privilieges)  
       sudo apt-get update  
       sudo apt-get install libboost-all-dev  
-  b. OTHERS: (Without root privileges. Add the last instruction line to end of ~/.bashrc) (eg: on a remote machine via ssh)  
+  b. OTHERS: (Without root privileges. Add the last instruction line to end of ~/.bashrc)  
+  (eg: on a remote machine via ssh)  
       wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz  
       tar -xvzf boost_1_64_0.tar.gz  
       mkdir boost-build  
