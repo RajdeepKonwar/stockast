@@ -73,10 +73,10 @@ int main( int argc, char** argv ) {
   int     plotFlag;     //! Flag indicating whether to plot or not
 
   //! Check for input terminal arguments. If none specified, plot by default
-  if (argc != 2)
+  if( argc != 2 )
     plotFlag  = 1;
   else
-    plotFlag  = (atoi)(argv[1]);
+    plotFlag  = (atoi)( argv[1] );
 
   //! Start time
   clock_t t   = clock();
@@ -105,11 +105,11 @@ int main( int argc, char** argv ) {
 
   //! Memory allocation
   stock     = new float* [inLoops];
-  for (i = 0; i < inLoops; i++)
+  for( i = 0; i < inLoops; i++ )
     stock[i] = new float [timesteps];
 
   avgStock  = new float* [outLoops];
-  for (i = 0; i < outLoops; i++)
+  for( i = 0; i < outLoops; i++ )
     avgStock[i] = new float [timesteps];
 
   optStock  = new float [timesteps];
@@ -127,7 +127,7 @@ int main( int argc, char** argv ) {
     {
       numThreads  = omp_get_num_threads();
       std::cout << "  Using " << numThreads << " thread(s)..\n";
-      omp_set_num_threads(numThreads);
+      omp_set_num_threads( numThreads );
     }
 
     /**
@@ -136,13 +136,13 @@ int main( int argc, char** argv ) {
      Faster threads are assigned more iterations (not Round Robin)
      */
     #pragma omp for schedule(dynamic)
-    for (i = 0; i < outLoops; i++) {
+    for( i = 0; i < outLoops; i++ ) {
 
       /**
        Using Black Scholes model to get stock price every iteration
        Returns data as a column vector having rows=timesteps
        */
-      for (j = 0; j < inLoops; j++)
+      for( j = 0; j < inLoops; j++ )
         stock[j]  = runBlackScholesModel( spot, timesteps, riskRate, sigma );
 
       //! Stores average of all estimated stock-price arrays
@@ -155,26 +155,26 @@ int main( int argc, char** argv ) {
   optStock  = find2DMean( avgStock, outLoops, timesteps );
 
   //! Write optimal outcome to disk
-  fp  = std::fopen("opt.csv", "w");
-  for (i = 0; i < timesteps; i++)
-    fprintf(fp, "%f\n", optStock[i]);
+  fp  = std::fopen( "opt.csv", "w" );
+  for( i = 0; i < timesteps; i++ )
+    fprintf( fp, "%f\n", optStock[i] );
 
   //! Close the file pointer
-  fclose(fp);
+  fclose( fp );
 
   //! Memory deallocation
-  for (i = 0; i < inLoops; i++)
+  for( i = 0; i < inLoops; i++ )
     delete[] stock[i];
   delete[] stock;
 
-  for (i= 0; i < outLoops; i++)
+  for( i= 0; i < outLoops; i++ )
     delete[] avgStock[i];
   delete[] avgStock;
 
   delete[] optStock;
 
   //! Plot the most likely outcome in Gnuplot if plotFlag = 1
-  if (plotFlag) {
+  if( plotFlag ) {
     Gnuplot gp( "gnuplot -persist" );
     gp << "set grid\n";
     gp << "set title 'Stock Market Forecast (3 hrs)'\n";
@@ -185,7 +185,7 @@ int main( int argc, char** argv ) {
 
     //! Finish time
   t = clock() - t;
-  std::cout << "  Time taken = " << (float)t/CLOCKS_PER_SEC << "s\n\n";
+  std::cout << "  Time taken = " << (float)t / CLOCKS_PER_SEC << "s\n\n";
 
   return 0;
 }
@@ -200,12 +200,12 @@ float* runBlackScholesModel( float sp, int n, float r, float sig ) {
   st[0]         = sp;               //! Stock price at t=0 is spot price
 
   //! Populate array with random nos.
-  for (i = 0; i < n-1; i++)
-    z[i]  = randGen(mean, sd);
+  for( i = 0; i < n - 1; i++ )
+    z[i]  = randGen( mean, sd );
 
   //! Apply Black Scholes equation to calculate stock price at next timestep
-  for (i = 0; i < n-1; i++)
-    st[i+1] = st[i] * exp (((r - (pow(sig,2) / 2)) * deltaT) + (sig * z[i] * sqrt(deltaT)));
+  for( i = 0; i < n-1; i++ )
+    st[i+1] = st[i] * exp( ((r - (pow( sig, 2 ) / 2)) * deltaT) + (sig * z[i] * sqrt( deltaT )) );
 
   delete[] z;
 
@@ -221,7 +221,7 @@ float* find2DMean( float **matrix, int M, int N ) {
   float*  avg = new float [N];
   float   sum = 0.0;
 
-  for ( i = 0; i < N; i++) {
+  for( i = 0; i < N; i++ ) {
 
     /**
      A private copy of 'sum' variable is created for each thread.
@@ -230,7 +230,7 @@ float* find2DMean( float **matrix, int M, int N ) {
      is written to the global shared variable.
      */
     #pragma omp parallel for private(j) reduction(+:sum)
-    for (j = 0; j < M; j++) {
+    for( j = 0; j < M; j++ ) {
       sum += matrix[j][i];
     }
 
@@ -251,7 +251,7 @@ float randGen( float mean, float sd ) {
   std::default_random_engine generator( seed );
   std::normal_distribution< float > distribution( mean, sd );
 
-  return distribution(generator);
+  return distribution( generator );
 }
 
 //! Calculates volatility from ml_data.csv file
@@ -262,36 +262,36 @@ float calcVolatility( float spot, int timesteps ) {
   FILE* fp;
 
   //! Open ml_data.csv in read-mode, exit on fail
-  fp = std::fopen("ml_data.csv","r");
-  if (!fp) {
+  fp = std::fopen( "ml_data.csv", "r" );
+  if( !fp ) {
     std::cout << "Cannot open ml_data.csv!\n";
-    exit(EXIT_FAILURE);
+    exit( EXIT_FAILURE );
   }
 
   //! Read the first line then close file
-  fgets(line, sizeof(line), fp);
-  fclose(fp);
+  fgets( line, sizeof( line ), fp );
+  fclose( fp );
 
   //! Get the return values of stock from file (min 2 to 180)
-  for (i = 0; i < len; i++) {
-    if (i == 0)
-      token   = strtok(line, ",");
+  for( i = 0; i < len; i++ ) {
+    if( i == 0 )
+      token   = strtok( line, "," );
     else
-      token   = strtok(NULL, ",");
-    priceArr[i] = atof(token);
+      token   = strtok( NULL, "," );
+    priceArr[i] = atof( token );
   }
 
   sum = spot;
   //! Find mean of the estimated minute-end prices
-  for (i = 0; i < len; i++)
+  for( i = 0; i < len; i++ )
     sum += priceArr[i];
   mean = sum / (len + 1);
 
   //! Calculate market volatility as standard deviation
-  sum = pow((spot - mean),2);
-  for (i = 0; i < len; i++)
-    sum += pow((priceArr[i] - mean),2);
-  sd = sqrt(sum);
+  sum = pow( (spot - mean), 2 );
+  for( i = 0; i < len; i++ )
+    sum += pow( (priceArr[i] - mean), 2 );
+  sd = sqrt( sum );
 
   //! Return as percentage
   return (sd / 100.0);
