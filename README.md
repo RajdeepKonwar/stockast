@@ -13,7 +13,6 @@ sudo apt install g++-6
 sudo update-alternatives --instal /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ /usr/bin/g++-6
 ```
 Remote machine (without root privileges; tested on [Comet](http://www.sdsc.edu/support/user_guides/comet.html))
-##### Important: Re-login afterwards
 ```
 wget https://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
 tar -xvzf gcc-6.3.0.tar.gz
@@ -24,9 +23,9 @@ mkdir gcc-build && cd gcc-build
 ../gcc-6.3.0/configure --disable-multilib -v --prefix=path/to/gcc-6.3.0
 make
 make install
-echo 'export PATH=path/to/gcc-6.3.0/bin/:$PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=path/to/gcc-6.3.0/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
-echo 'export LD_LIBRARY_PATH=path/to/gcc-6.3.0/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
+echo 'export PATH=/(path to gcc-6.3.0)/bin/:$PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
 2. Boost 1.64.0 or higher  
 Local machine
@@ -42,8 +41,9 @@ mkdir boost-build
 cd boost_1_64_0
 ./bootstrap.sh --prefix=/path/to/boost-build
 ./b2 install
-export LD_LIBRARY_PATH=/path/to/boost-build/lib:$LD_LIBRARY_PATH
+echo 'export LD_LIBRARY_PATH=/(path to boost-build)/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
+##### Important: Re-login after step 2
 3. Git
 ```
 sudo apt-get update
