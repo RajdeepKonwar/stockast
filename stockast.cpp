@@ -55,28 +55,28 @@
  */
 
 //! Header files
-#include  <iostream>
-#include  <chrono>
-#include  <omp.h>
-#include  <random>
-#include  <string.h>
-#include  "gnuplot-iostream.h"
+#include <iostream>
+#include <chrono>
+#include <omp.h>
+#include <random>
+#include <string.h>
+#include "gnuplot-iostream.h"
 
 //! Function Declarations
-float     calcVolatility( float spot, int timesteps );
-float*    find2DMean( float **stockMat, int M, int N );
-float     randGen( float mean, float sd );
-float*    runBlackScholesModel( float sp, int n, float r, float sig );
+float   calcVolatility( float spot, int timesteps );
+float*  find2DMean( float **stockMat, int M, int N );
+float   randGen( float mean, float sd );
+float*  runBlackScholesModel( float sp, int n, float r, float sig );
 
 //! Main function
-int main( int argc, char** argv ) {
+int main( int i_argc, char** i_argv ) {
   int     plotFlag;     //! Flag indicating whether to plot or not
 
   //! Check for input terminal arguments. If none specified, plot by default
-  if( argc != 2 )
+  if( i_argc != 2 )
     plotFlag  = 1;
   else
-    plotFlag  = (atoi)( argv[1] );
+    plotFlag  = atoi( i_argv[1] );
 
   //! Start time
   clock_t t   = clock();
@@ -120,10 +120,10 @@ int main( int argc, char** argv ) {
   std::cout << "  Using market volatility = " << sigma << std::endl;
 
   //! Parallel region with each thread having its own instance of variable 'i',
-  #pragma omp parallel private(i)
+#pragma omp parallel private(i)
   {
     //! Only one thread (irrespective of thread id) handles this region
-    #pragma omp single
+#pragma omp single
     {
       numThreads  = omp_get_num_threads();
       std::cout << "  Using " << numThreads << " thread(s)..\n";
@@ -135,7 +135,7 @@ int main( int argc, char** argv ) {
      grabs "chunk" iterations until all iterations are done.
      Faster threads are assigned more iterations (not Round Robin)
      */
-    #pragma omp for schedule(dynamic)
+#pragma omp for schedule(dynamic)
     for( i = 0; i < outLoops; i++ ) {
 
       /**
@@ -167,7 +167,7 @@ int main( int argc, char** argv ) {
     delete[] stock[i];
   delete[] stock;
 
-  for( i= 0; i < outLoops; i++ )
+  for( i = 0; i < outLoops; i++ )
     delete[] avgStock[i];
   delete[] avgStock;
 
@@ -204,8 +204,8 @@ float* runBlackScholesModel( float sp, int n, float r, float sig ) {
     z[i]  = randGen( mean, sd );
 
   //! Apply Black Scholes equation to calculate stock price at next timestep
-  for( i = 0; i < n-1; i++ )
-    st[i+1] = st[i] * exp( ((r - (pow( sig, 2 ) / 2)) * deltaT) + (sig * z[i] * sqrt( deltaT )) );
+  for( i = 0; i < n - 1; i++ )
+    st[i+1] = st[i] * exp( ((r - (pow( sig, 2.0 ) / 2)) * deltaT) + (sig * z[i] * sqrt( deltaT )) );
 
   delete[] z;
 
@@ -229,7 +229,7 @@ float* find2DMean( float **matrix, int M, int N ) {
      all private copies of the shared variable, and the final result
      is written to the global shared variable.
      */
-    #pragma omp parallel for private(j) reduction(+:sum)
+#pragma omp parallel for private(j) reduction(+:sum)
     for( j = 0; j < M; j++ ) {
       sum += matrix[j][i];
     }
@@ -269,7 +269,11 @@ float calcVolatility( float spot, int timesteps ) {
   }
 
   //! Read the first line then close file
-  fgets( line, sizeof( line ), fp );
+  if( fgets( line, sizeof( line ), fp ) == NULL ) {
+    std::cout << "Cannot read from ml_data.csv!\n";
+    fclose( fp );
+    exit( EXIT_FAILURE );
+  }
   fclose( fp );
 
   //! Get the return values of stock from file (min 2 to 180)
@@ -288,13 +292,11 @@ float calcVolatility( float spot, int timesteps ) {
   mean = sum / (len + 1);
 
   //! Calculate market volatility as standard deviation
-  sum = pow( (spot - mean), 2 );
+  sum = pow( (spot - mean), 2.0 );
   for( i = 0; i < len; i++ )
-    sum += pow( (priceArr[i] - mean), 2 );
+    sum += pow( (priceArr[i] - mean), 2.0 );
   sd = sqrt( sum );
 
   //! Return as percentage
   return (sd / 100.0);
 }
-
-//! End of stockast.cpp
