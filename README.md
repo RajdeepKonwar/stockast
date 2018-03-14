@@ -1,4 +1,6 @@
 # Stockast
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast?ref=badge_shield)
+
 ## Stock Market Forecasting using Parallel Monte-Carlo Simulations and Machine Learning
 
 ### Requirements
@@ -84,3 +86,7 @@ The file "data.csv" contains the original stock-price returns taken from the mar
 The file "ml_data.csv" contains the machine-learning predicted stock-price values for the 3 hours.  
 The file "opt.csv" contains the output (most likely outcome) price-vector from our code.  
 The script "profiling.sh" runs the parallel code from 1 to max.no. of threads and displays walltimes for each while suppressing any plots (i.e. ./stockast 0 option)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast?ref=badge_large)
