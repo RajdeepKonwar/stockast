@@ -71,7 +71,7 @@ float*  runBlackScholesModel( float sp, int n, float r, float sig );
 
 //! Main function
 int main( int i_argc, char** i_argv ) {
-  int     plotFlag;     //! Flag indicating whether to plot or not
+  int plotFlag;     //! Flag indicating whether to plot or not
 
   //! Check for input terminal arguments. If none specified, plot by default
   if( i_argc != 2 )
