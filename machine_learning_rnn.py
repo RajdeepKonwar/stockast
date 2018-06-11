@@ -2,7 +2,7 @@
 # @author Premanand Kumar (p8kumar AT ucsd.edu)
 #
 # @section LICENSE
-# Copyright (c) 2017, Regents of the University of California
+# Copyright (c) 2017-18, Regents of the University of California
 # All rights reserved.
 #
 # @section REQUIREMENTS
