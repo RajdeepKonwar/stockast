@@ -91,10 +91,10 @@ int main( int i_argc, char** i_argv ) {
   float   riskRate;     //! Risk free interest rate (%)
   float   sigma;        //! Market volatility (calculated from data.csv)
   float   spot;         //! Spot price (at t = 0)
-  float** stock;        //! Matrix for stock-price vectors per iteration
-  float** avgStock;     //! Matrix for mean of stock-price vectors per iteration
-  float*  optStock;     //! Vector for most likely outcome stock price
-  FILE*   fp;           //! File pointer
+  float   **stock;      //! Matrix for stock-price vectors per iteration
+  float   **avgStock;   //! Matrix for mean of stock-price vectors per iteration
+  float   *optStock;    //! Vector for most likely outcome stock price
+  FILE    *fp;          //! File pointer
 
   //! Initialization
   timesteps = 180;
