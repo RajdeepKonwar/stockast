@@ -56,31 +56,43 @@ git clone https://github.com/dstahlke/gnuplot-iostream.git
 Then copy "gnuplot-iostream.h" to run dir
 
 ### Compile Instructions
-Local machine
+* Local machine
 ```
-g++ stockast.cpp -o stockast -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
+make
 ```
-Remote machine
+Type `make clean` to clean object file and executable.
+* Remote machine
 ```
-g++ stockast.cpp -o stockast -I /path/to/boost-build/include -L /path/to/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
+g++ stockast.cpp -o stockast -I "path_to"/boost-build/include -L "path_to"/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 ```
 
-### Run Instructions (0 for no plot & 1 for plot)
+### Run Instructions
+Set the number of threads to be used for computation,
+```
+export OMP_NUM_THREADS=number_of_threads
+```
+For example, `export OMP_NUM_THREADS=8`.
+Then run the program (0 for no plot & 1 for plot)
 ```
 ./stockast 0
 ./stockast 1
 ```
 
 ### Requirements to launch machine_learning_rnn.py
-Python 2 or 3  
-numpy  
-pandas  
-scikit-learn  
-TensorFlow - 1.0.0  
-Scikit-Learn  
+Python 2 or 3
+numpy
+pandas
+scikit-learn
+TensorFlow - 1.0.0
+Scikit-Learn
 
 ### General info
-The file "data.csv" contains the original stock-price returns taken from the market.  
-The file "ml_data.csv" contains the machine-learning predicted stock-price values for the 3 hours.  
-The file "opt.csv" contains the output (most likely outcome) price-vector from our code.  
-The script "profiling.sh" runs the parallel code from 1 to max.no. of threads and displays walltimes for each while suppressing any plots (i.e. ./stockast 0 option)
+* The file "data.csv" contains the original stock-price returns taken from the market.
+* The file "ml_data.csv" contains the machine-learning predicted stock-price values for the 3 hours.
+* The file "opt.csv" contains the output (most likely outcome) price-vector from our code.
+* The script "profiling.sh" runs the parallel code from 1 to maximum number of threads and displays walltimes for each while suppressing any plots (i.e. ./stockast 0 option)
+* To use the script, type
+```
+./profiling.sh "number_of_threads"
+```
+For example, `./profiling.sh 8`.

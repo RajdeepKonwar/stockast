@@ -1,4 +1,3 @@
-#! /bin/bash
 ##
 # @file This file is part of stockast.
 #
@@ -26,18 +25,21 @@
 # SOFTWARE.
 #
 # @section DESCRIPTION
-# Profiling script for different number of threads used.
+# Makefile.
 ##
 
-if [ "$#" -ne 1 ]; then
-  echo "Usage: $0 <Number of threads>" >&2
-  exit 1
-fi
+CXX ?= g++
+CXXFLAGS=-std=c++11 -O3 -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
+LDFLAGS=-lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 
-> time_local.log
-for ((i = 1; i <=$1; i++));
-do
-  echo $i;
-  export OMP_NUM_THREADS=$i;
-  time ./stockast 0 >> time_local.log;
-done
+OBJECTS=stockast.o
+
+stockast: $(OBJECTS)
+					$(CXX) $(CXXFLAGS) $(OBJECTS) -o stockast $(LDFLAGS)
+
+stockast.o: stockast.cpp
+
+.PHONY: clean
+
+clean:
+			rm -f *.o stockast
