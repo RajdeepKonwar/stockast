@@ -35,7 +35,7 @@ LDFLAGS=-lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 OBJECTS=stockast.o
 
 stockast: $(OBJECTS)
-					$(CXX) $(CXXFLAGS) $(OBJECTS) -o stockast $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) $(OBJECTS) -o stockast $(LDFLAGS)
 
 stockast.o: stockast.cpp
 
