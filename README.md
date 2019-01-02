@@ -3,6 +3,7 @@
 
 ### Requirements
 1. gcc version 6.3.0 or higher
+
 **Local machine** (with root privileges; tested on an Ubuntu laptop)
 ```
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -27,6 +28,7 @@ echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib:$LD_LIBRARY_PATH' >> ~/.ba
 echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
 2. Boost 1.64.0 or higher
+
 **Local machine**
 ```
 sudo apt-get update
