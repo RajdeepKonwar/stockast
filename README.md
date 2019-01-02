@@ -2,9 +2,8 @@
 ## Stock Market Forecasting using Parallel (OpenMP) Monte-Carlo Simulations
 
 ### Requirements
-(Steps 3 & 4 required only if you're missing the file "gnuplot-iostream.h")
 1. gcc version 6.3.0 or higher
-Local machine (with root privileges; tested on an Ubuntu laptop)
+**Local machine** (with root privileges; tested on an Ubuntu laptop)
 ```
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
 sudo apt update
@@ -12,7 +11,7 @@ sudo apt install gcc-6
 sudo apt install g++-6
 sudo update-alternatives --instal /usr/bin/gcc gcc /usr/bin/gcc-6 60 --slave /usr/bin/g++ /usr/bin/g++-6
 ```
-Remote machine (without root privileges; tested on [Comet](http://www.sdsc.edu/support/user_guides/comet.html))
+**Remote machine** (without root privileges; tested on [Comet](http://www.sdsc.edu/support/user_guides/comet.html))
 ```
 wget https://ftp.gnu.org/gnu/gcc/gcc-6.3.0/gcc-6.3.0.tar.gz
 tar -xvzf gcc-6.3.0.tar.gz
@@ -28,12 +27,12 @@ echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib:$LD_LIBRARY_PATH' >> ~/.ba
 echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
 2. Boost 1.64.0 or higher
-Local machine
+**Local machine**
 ```
 sudo apt-get update
 sudo apt-get install libboost-all-dev
 ```
-Remote machine
+**Remote machine**
 ```
 wget https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.gz
 tar -xvzf boost_1_64_0.tar.gz
@@ -43,17 +42,6 @@ cd boost_1_64_0
 ./b2 install
 echo 'export LD_LIBRARY_PATH=/(path to boost-build)/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
-##### Important: Re-login after step 2
-3. Git
-```
-sudo apt-get update
-sudo apt-get install git
-```
-4. gnuplot-iostream
-```
-git clone https://github.com/dstahlke/gnuplot-iostream.git
-```
-Then copy "gnuplot-iostream.h" to run dir
 
 ### Compile Instructions
 * Local machine
