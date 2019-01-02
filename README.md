@@ -44,12 +44,12 @@ echo 'export LD_LIBRARY_PATH=/(path to boost-build)/lib:$LD_LIBRARY_PATH' >> ~/.
 ```
 
 ### Compile Instructions
-* Local machine
+* **Local machine**
 ```
 make
 ```
 Type `make clean` to clean object file and executable.
-* Remote machine
+* **Remote machine**
 ```
 g++ stockast.cpp -o stockast -I "path_to"/boost-build/include -L "path_to"/boost-build/lib -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
 ```
