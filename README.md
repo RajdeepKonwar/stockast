@@ -1,9 +1,9 @@
 # Stockast [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast?ref=badge_shield)
-## Stock Market Forecasting using Parallel Monte-Carlo Simulations and Machine Learning
+## Stock Market Forecasting using Parallel (OpenMP) Monte-Carlo Simulations
 
 ### Requirements
 (Steps 3 & 4 required only if you're missing the file "gnuplot-iostream.h")
-1. gcc version 6.3.0 or higher  
+1. gcc version 6.3.0 or higher
 Local machine (with root privileges; tested on an Ubuntu laptop)
 ```
 sudo add-apt-repository ppa:ubuntu-toolchain-r/test
@@ -27,7 +27,7 @@ echo 'export PATH=/(path to gcc-6.3.0)/bin/:$PATH' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
 echo 'export LD_LIBRARY_PATH=/(path to gcc-6.3.0)/lib64:$LD_LIBRARY_PATH' >> ~/.bashrc
 ```
-2. Boost 1.64.0 or higher  
+2. Boost 1.64.0 or higher
 Local machine
 ```
 sudo apt-get update
@@ -77,14 +77,6 @@ Then run the program (0 for no plot & 1 for plot)
 ./stockast 0
 ./stockast 1
 ```
-
-### Requirements to launch machine_learning_rnn.py
-Python 2 or 3
-numpy
-pandas
-scikit-learn
-TensorFlow - 1.0.0
-Scikit-Learn
 
 ### General info
 * The file "data.csv" contains the original stock-price returns taken from the market.
