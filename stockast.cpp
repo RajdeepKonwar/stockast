@@ -40,6 +40,7 @@
 #include <chrono>
 #include <omp.h>
 #include <random>
+#include <memory>
 
 //! ---------------------------------------------------------------------------
 //! Calculates volatility from ml_data.csv file
@@ -67,7 +68,7 @@ float calcVolatility(const float& spotPrice, const int& timesteps)
 	fp.close();
 
 	int i = 0, len = timesteps - 1;
-	float* priceArr = new float [timesteps - 1];
+	std::unique_ptr<float[]> priceArr = std::make_unique<float[]>(timesteps - 1);
 	std::istringstream iss(line);
 	std::string token;
 
@@ -88,7 +89,6 @@ float calcVolatility(const float& spotPrice, const int& timesteps)
 	for (i = 0; i < len; i++)
 		sum += powf((priceArr[i] - meanPrice), 2.0f);
 
-	delete[] priceArr;
 	float stdDev = sqrtf(sum);
 
 	//! Return as percentage
@@ -146,7 +146,7 @@ float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const 
 {
 	float  mean = 0.0f, stdDev = 1.0f;			//! Mean and standard deviation
 	float  deltaT = 1.0f / timesteps;			//! Timestep
-	float* normRand = new float[timesteps - 1];	//! Array of normally distributed random nos.
+	std::unique_ptr<float[]> normRand = std::make_unique<float[]>(timesteps - 1);	//! Array of normally distributed random nos.
 	float* stockPrice = new float[timesteps];	//! Array of stock price at diff. times
 	stockPrice[0] = spotPrice;					//! Stock price at t=0 is spot price
 
@@ -158,7 +158,6 @@ float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const 
 	for (int i = 0; i < timesteps - 1; i++)
 		stockPrice[i + 1] = stockPrice[i] * exp(((riskRate - (powf(volatility, 2.0f) / 2.0f)) * deltaT) + (volatility * normRand[i] * sqrtf(deltaT)));
 
-	delete[] normRand;
 	return stockPrice;
 }
 

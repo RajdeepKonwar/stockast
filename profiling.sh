@@ -39,5 +39,5 @@ for ((i = 1; i <=$1; i++));
 do
   echo $i;
   export OMP_NUM_THREADS=$i;
-  time ./stockast 0 >> time_local.log;
+  time ./stockast >> time_local.log;
 done
