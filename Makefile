@@ -29,8 +29,8 @@
 ##
 
 CXX ?= g++
-CXXFLAGS=-std=c++11 -O3 -lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
-LDFLAGS=-lboost_iostreams -lboost_system -lboost_filesystem -fopenmp
+CXXFLAGS=-std=c++11 -O3 -fopenmp
+LDFLAGS=-fopenmp
 
 OBJECTS=stockast.o
 
