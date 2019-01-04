@@ -8,15 +8,10 @@
 * Build and run!
 
 #### Linux
-##### **Local machine**
 ```
 make
 ```
 Type `make clean` to clean object file and executable.
-##### **Remote machine**
-```
-g++ stockast.cpp -o stockast -fopenmp
-```
 
 ### Run Instructions
 #### Windows
