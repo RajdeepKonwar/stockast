@@ -34,14 +34,12 @@
 
 //! Header files
 #include <iostream>
-#include <cstring>
+#include <fstream>
+#include <string>
+#include <sstream>
 #include <chrono>
 #include <omp.h>
 #include <random>
-
-#include "gnuplot-iostream.h"
-
-#define LINE_LEN 4096
 
 //! ---------------------------------------------------------------------------
 //! Calculates volatility from ml_data.csv file
@@ -49,46 +47,48 @@
 float calcVolatility(const float& spotPrice, const int& timesteps)
 {
 	//! Open ml_data.csv in read-mode, exit on fail
-	FILE* fp = std::fopen("ml_data.csv", "r");
-	if (!fp)
+	const std::string fileName("ml_data.csv");
+	std::ifstream fp;
+	fp.open(fileName, std::ifstream::in);
+	if (!fp.is_open())
 	{
 		std::cerr << "Cannot open ml_data.csv! Exiting..\n";
 		exit(EXIT_FAILURE);
 	}
 
-	char  line[LINE_LEN];
+	std::string line;
 	//! Read the first line then close file
-	if (fgets(line, sizeof(line), fp) == nullptr)
+	if (!std::getline(fp, line))
 	{
 		std::cerr << "Cannot read from ml_data.csv! Exiting..\n";
-		fclose(fp);
+		fp.close();
 		exit(EXIT_FAILURE);
 	}
-	fclose(fp);
+	fp.close();
 
-	char* token;
-	int len = timesteps - 1;
-	float priceArr[len];
+	int i = 0, len = timesteps - 1;
+	float* priceArr = new float [timesteps - 1];
+	std::istringstream iss(line);
+	std::string token;
+
 	//! Get the return values of stock from file (min 2 to 180)
-	for (int i = 0; i < len; i++)
+	while (std::getline(iss, token, ','))
 	{
-		if (i == 0)
-			token = strtok(line, ",");
-		else
-			token = strtok(NULL, ",");
-		priceArr[i] = std::atof(token);
+		priceArr[i++] = std::stof(token);
 	}
 
 	float sum = spotPrice;
 	//! Find mean of the estimated minute-end prices
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 		sum += priceArr[i];
 	float meanPrice = sum / (len + 1);
 
 	//! Calculate market volatility as standard deviation
 	sum = powf((spotPrice - meanPrice), 2.0f);
-	for (int i = 0; i < len; i++)
+	for (i = 0; i < len; i++)
 		sum += powf((priceArr[i] - meanPrice), 2.0f);
+
+	delete[] priceArr;
 	float stdDev = sqrtf(sum);
 
 	//! Return as percentage
@@ -133,8 +133,8 @@ normal distribution on taking mean 0.0 and standard deviation 1.0
 ----------------------------------------------------------------------------*/
 float randGen(const float& mean, const float& stdDev)
 {
-	unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
-	std::default_random_engine generator(seed);
+	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+	std::default_random_engine generator(static_cast<unsigned int>(seed));
 	std::normal_distribution<float> distribution(mean, stdDev);
 	return distribution(generator);
 }
@@ -151,11 +151,11 @@ float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const 
 	stockPrice[0] = spotPrice;					//! Stock price at t=0 is spot price
 
 	//! Populate array with random nos.
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < timesteps - 1; i++)
 		normRand[i] = randGen(mean, stdDev);
 
 	//! Apply Black Scholes equation to calculate stock price at next timestep
-	for (int i = 0; i < n - 1; i++)
+	for (int i = 0; i < timesteps - 1; i++)
 		stockPrice[i + 1] = stockPrice[i] * exp(((riskRate - (powf(volatility, 2.0f) / 2.0f)) * deltaT) + (volatility * normRand[i] * sqrtf(deltaT)));
 
 	delete[] normRand;
@@ -168,13 +168,6 @@ float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const 
 int main(int argc, char** argv)
 {
 	clock_t t = clock();
-	int plotFlag;	//! Flag indicating whether to plot or not
-
-	//! Check for input terminal arguments. If none specified, plot by default
-	if (argc != 2)
-		plotFlag = 1;
-	else
-		plotFlag = std::atoi(argv[1]);
 
 	int inLoops = 100;		//! Inner loop iterations
 	int outLoops = 10000;	//! Outer loop iterations
@@ -182,12 +175,12 @@ int main(int argc, char** argv)
 
 	//! Matrix for stock-price vectors per iteration
 	float** stock = new float *[inLoops];
-	for (i = 0; i < inLoops; i++)
+	for (int i = 0; i < inLoops; i++)
 		stock[i] = new float[timesteps];
 
 	//! Matrix for mean of stock-price vectors per iteration
 	float** avgStock = new float*[outLoops];
-	for (i = 0; i < outLoops; i++)
+	for (int i = 0; i < outLoops; i++)
 		avgStock[i] = new float[timesteps];
 
 	//! Vector for most likely outcome stock price
@@ -201,7 +194,7 @@ int main(int argc, char** argv)
 
 	//! Welcome message
 	std::cout << "--Welcome to Stockast: Stock Forecasting Tool--\n";
-	std::cout << "  Parth Shah, Premanand Kumar, Rajdeep Konwar  \n\n";
+	std::cout << "  Copyright (c) 2017-2019 Rajdeep Konwar\n\n";
 	std::cout << "  Using market volatility = " << volatility << std::endl;
 
 	int i;
@@ -229,7 +222,10 @@ int main(int argc, char** argv)
 			Returns data as a column vector having rows=timesteps
 			*/
 			for (int j = 0; j < inLoops; j++)
+			{
+				//std::cout << "j: " << j << "\n";
 				stock[j] = runBlackScholesModel(spotPrice, timesteps, riskRate, volatility);
+			}
 
 			//! Stores average of all estimated stock-price arrays
 			avgStock[i] = find2DMean(stock, inLoops, timesteps);
@@ -241,16 +237,17 @@ int main(int argc, char** argv)
 	optStock = find2DMean(avgStock, outLoops, timesteps);
 
 	//! Write optimal outcome to disk
-	FILE* fp = std::fopen("opt.csv", "w");
-	if (!fp)
+	std::ofstream fp;
+	fp.open("opt.csv", std::ofstream::out);
+	if (!fp.is_open())
 	{
 		std::cerr << "Couldn't open opt.csv! Exiting..\n";
 		return EXIT_FAILURE;
 	}
 
 	for (i = 0; i < timesteps; i++)
-		fprintf(fp, "%f\n", optStock[i]);
-	fclose(fp);
+		fp << optStock[i] << "\n";
+	fp.close();
 
 	for (i = 0; i < inLoops; i++)
 		delete[] stock[i];
@@ -262,19 +259,9 @@ int main(int argc, char** argv)
 
 	delete[] optStock;
 
-	//! Plot the most likely outcome in Gnuplot if plotFlag = 1
-	if (plotFlag)
-	{
-		Gnuplot gp("gnuplot -persist");
-		gp << "set grid\n";
-		gp << "set title 'Stock Market Forecast (3 hrs)'\n";
-		gp << "set xlabel 'Time (min)'\n";
-		gp << "set ylabel 'Price'\n";
-		gp << "plot 'opt.csv' w l title 'Predicted Stock Price'\n";
-	}
-
 	t = clock() - t;
 	std::cout << "  Time taken = " << static_cast<float>(t / CLOCKS_PER_SEC) << "s\n\n";
+	std::cin.ignore();
 
 	return EXIT_SUCCESS;
 }
