@@ -3,7 +3,7 @@
 
 ### Compile Instructions
 #### Windows
-* Open stockast.sln
+* Open `stockast.sln`
 * Right-click Solution 'stockast' in the Solution Explorer and select `Retarget solution`
 * Build and run!
 
