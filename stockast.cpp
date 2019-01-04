@@ -205,7 +205,8 @@ int main(int argc, char** argv)
 #pragma omp single
 		{
 			int numThreads = omp_get_num_threads();	//! Number of threads
-			std::cout << "  Using " << numThreads << " thread(s)..\n";
+			std::cout << "  Using " << numThreads << " thread(s)\n\n";
+			std::cout << "  Have patience! Computing..";
 			omp_set_num_threads(numThreads);
 		}
 
@@ -260,8 +261,8 @@ int main(int argc, char** argv)
 	delete[] optStock;
 
 	t = clock() - t;
-	std::cout << "  Time taken = " << static_cast<float>(t / CLOCKS_PER_SEC) << "s\n\n";
-	std::cin.ignore();
+	std::cout << " done!\n  Time taken = " << static_cast<float>(t / CLOCKS_PER_SEC) << "s";
 
+	getchar();
 	return EXIT_SUCCESS;
 }
