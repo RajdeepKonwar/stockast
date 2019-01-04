@@ -1,6 +1,8 @@
 # Stockast [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRajdeepKonwar%2Fstockast?ref=badge_shield)
 ## Stock Market Forecasting using Parallel (OpenMP) Monte-Carlo Simulations
 
+![alt text](https://i.imgur.com/dHf0aRO.png)
+
 ### Compile Instructions
 #### Windows
 * Open `stockast.sln`
@@ -29,6 +31,8 @@ Then run the program
 ```
 ./stockast
 ```
+
+![alt text](https://i.imgur.com/FpgwDyg.png)
 
 ### General info
 * The input file "ml_data.csv" contains the stock-price values for 3 hours prior to run-time; this acts as the history-data and helps estimate the market volatility.
