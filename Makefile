@@ -29,7 +29,7 @@
 ##
 
 CXX ?= g++
-CXXFLAGS=-std=c++11 -O3 -fopenmp
+CXXFLAGS=-std=c++14 -O3 -fopenmp
 LDFLAGS=-fopenmp
 
 OBJECTS=stockast.o
