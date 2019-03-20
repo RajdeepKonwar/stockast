@@ -45,7 +45,7 @@
 //! ---------------------------------------------------------------------------
 //! Calculates volatility from ml_data.csv file
 //! ---------------------------------------------------------------------------
-float calcVolatility(const float& spotPrice, const int& timesteps)
+float calcVolatility(float spotPrice, int timesteps)
 {
 	//! Open ml_data.csv in read-mode, exit on fail
 	const std::string fileName("ml_data.csv");
@@ -74,9 +74,7 @@ float calcVolatility(const float& spotPrice, const int& timesteps)
 
 	//! Get the return values of stock from file (min 2 to 180)
 	while (std::getline(iss, token, ','))
-	{
 		priceArr[i++] = std::stof(token);
-	}
 
 	float sum = spotPrice;
 	//! Find mean of the estimated minute-end prices
@@ -99,7 +97,7 @@ float calcVolatility(const float& spotPrice, const int& timesteps)
 Finds mean of a 2D array across first index (inLoops)
 M is in/outLoops and N is timesteps
 ----------------------------------------------------------------------------*/
-float* find2DMean(float** matrix, const int& numLoops, const int& timesteps)
+float * find2DMean(float **matrix, int numLoops, int timesteps)
 {
 	int j;
 	float* avg = new float[timesteps];
@@ -131,7 +129,7 @@ float* find2DMean(float** matrix, const int& numLoops, const int& timesteps)
 Generates a random number seeded by system clock based on standard
 normal distribution on taking mean 0.0 and standard deviation 1.0
 ----------------------------------------------------------------------------*/
-float randGen(const float& mean, const float& stdDev)
+float randGen(float mean, float stdDev)
 {
 	auto seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::default_random_engine generator(static_cast<unsigned int>(seed));
@@ -142,7 +140,7 @@ float randGen(const float& mean, const float& stdDev)
 //! ---------------------------------------------------------------------------
 //! Simulates Black Scholes model
 //! ---------------------------------------------------------------------------
-float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const float& riskRate, const float& volatility)
+float * runBlackScholesModel(float spotPrice, int timesteps, float riskRate, float volatility)
 {
 	float  mean = 0.0f, stdDev = 1.0f;			//! Mean and standard deviation
 	float  deltaT = 1.0f / timesteps;			//! Timestep
@@ -164,7 +162,7 @@ float* runBlackScholesModel(const float& spotPrice, const int& timesteps, const 
 //! ---------------------------------------------------------------------------
 //! Main function
 //! ---------------------------------------------------------------------------
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
 	clock_t t = clock();
 
@@ -173,17 +171,17 @@ int main(int argc, char** argv)
 	int timesteps = 180;	//! Stock market time-intervals (min)
 
 	//! Matrix for stock-price vectors per iteration
-	float** stock = new float *[inLoops];
+	float **stock = new float *[inLoops];
 	for (int i = 0; i < inLoops; i++)
 		stock[i] = new float[timesteps];
 
 	//! Matrix for mean of stock-price vectors per iteration
-	float** avgStock = new float*[outLoops];
+	float **avgStock = new float*[outLoops];
 	for (int i = 0; i < outLoops; i++)
 		avgStock[i] = new float[timesteps];
 
 	//! Vector for most likely outcome stock price
-	float* optStock = new float[timesteps];
+	float *optStock = new float[timesteps];
 
 	float riskRate = 0.001f;	//! Risk free interest rate (%)
 	float spotPrice = 100.0f;	//! Spot price (at t = 0)
@@ -222,10 +220,7 @@ int main(int argc, char** argv)
 			Returns data as a column vector having rows=timesteps
 			*/
 			for (int j = 0; j < inLoops; j++)
-			{
-				//std::cout << "j: " << j << "\n";
 				stock[j] = runBlackScholesModel(spotPrice, timesteps, riskRate, volatility);
-			}
 
 			//! Stores average of all estimated stock-price arrays
 			avgStock[i] = find2DMean(stock, inLoops, timesteps);
