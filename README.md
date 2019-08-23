@@ -26,7 +26,7 @@ Set the number of threads to be used for computation,
 ```
 export OMP_NUM_THREADS=number_of_threads
 ```
-For example, `export OMP_NUM_THREADS=8`.
+For example, `export OMP_NUM_THREADS=12`.
 Then run the program
 ```
 ./stockast
@@ -41,4 +41,4 @@ Then run the program
 ```
 ./profiling.sh "number_of_threads"
 ```
-For example, `./profiling.sh 8`.
+For example, `./profiling.sh 12`.
