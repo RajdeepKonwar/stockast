@@ -32,7 +32,7 @@ Then run the program
 ./stockast
 ```
 
-![alt text](https://imgur.com/a/hJMIKAB)
+![Stockast](https://i.imgur.com/9UES222.png)
 
 ### General info
 * The input file "ml_data.csv" contains the stock-price values for 3 hours prior to run-time; this acts as the history-data and helps estimate the market volatility.
