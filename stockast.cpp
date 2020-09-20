@@ -43,17 +43,17 @@
 #include <string>
 
 //----------------------------------------------------------------------------
-// Calculates volatility from ml_data.csv file
+// Calculates volatility from data.csv file
 //----------------------------------------------------------------------------
 float calculate_volatility(float spot_price, int time_steps)
 {
-    // Open ml_data.csv in read-mode, exit on fail
-    const char* file_name = "ml_data.csv";
+    // Open data.csv in read-mode, exit on fail
+    const char* file_name = "data.csv";
     std::ifstream file_ptr;
     file_ptr.open(file_name, std::ifstream::in);
     if (!file_ptr.is_open())
     {
-        std::cerr << "Cannot open ml_data.csv! Exiting..\n";
+        std::cerr << "Cannot open data.csv! Exiting..\n";
         exit(EXIT_FAILURE);
     }
 
@@ -61,7 +61,7 @@ float calculate_volatility(float spot_price, int time_steps)
     // Read the first line then close file
     if (!std::getline(file_ptr, line))
     {
-        std::cerr << "Cannot read from ml_data.csv! Exiting..\n";
+        std::cerr << "Cannot read from data.csv! Exiting..\n";
         file_ptr.close();
         exit(EXIT_FAILURE);
     }
@@ -184,7 +184,7 @@ int main(int argc, char** argv)
     float risk_rate = 0.001f;   // Risk free interest rate (%)
     float spot_price = 100.0f;  // Spot price (at t = 0)
 
-    // Market volatility (calculated from ml_data.csv)
+    // Market volatility (calculated from data.csv)
     float volatility = calculate_volatility(spot_price, time_steps);
 
     // Welcome message
