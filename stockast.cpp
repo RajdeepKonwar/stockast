@@ -4,7 +4,7 @@
 * @section LICENSE
 * MIT License
 *
-* Copyright (c) 2017-2019 Rajdeep Konwar
+* Copyright (c) 2017-2020 Rajdeep Konwar
 *
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -189,7 +189,7 @@ int main(int argc, char** argv)
 
     // Welcome message
     std::cout << "--Welcome to Stockast: Stock Forecasting Tool--\n";
-    std::cout << "  Copyright (c) 2017-2019 Rajdeep Konwar\n\n";
+    std::cout << "  Copyright (c) 2017-2020 Rajdeep Konwar\n\n";
     std::cout << "  Using market volatility = " << volatility << std::endl;
 
     int i;
