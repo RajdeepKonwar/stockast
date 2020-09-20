@@ -6,7 +6,7 @@
 ### Compile Instructions
 #### Windows
 * Open `stockast.sln`
-* Right-click Solution 'stockast' in the Solution Explorer and select `Retarget solution`
+* Right-click Solution 'stockast' in the Solution Explorer and select `Retarget solution` (should happen automagically in VS2019)
 * Build and run!
 
 #### Linux
@@ -26,7 +26,7 @@ Set the number of threads to be used for computation,
 ```
 export OMP_NUM_THREADS=number_of_threads
 ```
-For example, `export OMP_NUM_THREADS=12`.
+For example, `export OMP_NUM_THREADS=8`.
 Then run the program
 ```
 ./stockast
@@ -35,10 +35,10 @@ Then run the program
 ![Stockast](https://i.imgur.com/9UES222.png)
 
 ### General info
-* The input file "ml_data.csv" contains the stock-price values for 3 hours prior to run-time; this acts as the history-data and helps estimate the market volatility.
+* The input file "data.csv" contains the stock-price values for 3 hours prior to run-time; this acts as the history-data and helps estimate the market volatility.
 * The output file "opt.csv" contains the output (most likely outcome) price-vector from our code. One can use Excel or gnuplot to plot the resulting line graph of the predicted stock pricing.
 * (**Linux only**) The script "profiling.sh" runs the parallel code from 1 to the specified number of threads. To use the script,
 ```
 ./profiling.sh "number_of_threads"
 ```
-For example, `./profiling.sh 12`.
+For example, `./profiling.sh 8`.
