@@ -129,7 +129,7 @@ float* find2dMean(float** matrix, int32_t numLoops, int32_t timeSteps)
 ----------------------------------------------------------------------------*/
 float genRand(float mean, float stdDev)
 {
-    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    const auto seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::default_random_engine generator(static_cast<uint32_t>(seed));
     std::normal_distribution<float> distribution(mean, stdDev);
     return distribution(generator);
@@ -140,7 +140,7 @@ float genRand(float mean, float stdDev)
 //----------------------------------------------------------------------------
 float* runBlackScholesModel(float spotPrice, int32_t timeSteps, float riskRate, float volatility)
 {
-    float  mean = 0.0f, stdDev = 1.0f;                                             // Mean and standard deviation
+    static constexpr float  mean = 0.0f, stdDev = 1.0f;                                             // Mean and standard deviation
     float  deltaT = 1.0f / timeSteps;                                              // Timestep
     std::unique_ptr<float[]> normRand = std::make_unique<float[]>(timeSteps - 1); // Array of normally distributed random nos.
     float* stockPrice = new float[timeSteps];                                     // Array of stock price at diff. times
@@ -164,9 +164,9 @@ int32_t main(int32_t argc, char** argv)
 {
     const auto beginTime = std::chrono::system_clock::now();
 
-    int32_t inLoops = 100;     // Inner loop iterations
-    int32_t outLoops = 10000;  // Outer loop iterations
-    int32_t timeSteps = 180;   // Stock market time-intervals (min)
+    static constexpr int32_t inLoops = 100;     // Inner loop iterations
+    static constexpr int32_t outLoops = 10000;  // Outer loop iterations
+    static constexpr int32_t timeSteps = 180;   // Stock market time-intervals (min)
 
     // Matrix for stock-price vectors per iteration
     float** stock = new float* [inLoops];
@@ -178,14 +178,10 @@ int32_t main(int32_t argc, char** argv)
     for (int32_t i = 0; i < outLoops; i++)
         avgStock[i] = new float[timeSteps];
 
-    // Vector for most likely outcome stock price
-    float* optStock = new float[timeSteps];
-
-    float riskRate = 0.001f;   // Risk free interest rate (%)
-    float spotPrice = 100.0f;  // Spot price (at t = 0)
+    static constexpr float spotPrice = 100.0f;  // Spot price (at t = 0)
 
     // Market volatility (calculated from data.csv)
-    float volatility = calculateVolatility(spotPrice, timeSteps);
+    const float volatility = calculateVolatility(spotPrice, timeSteps);
 
     // Welcome message
     std::cout << "--Welcome to Stockast: Stock Forecasting Tool--\n";
@@ -199,7 +195,7 @@ int32_t main(int32_t argc, char** argv)
         // Only one thread (irrespective of thread id) handles this region
 #pragma omp single
         {
-            int32_t numThreads = omp_get_num_threads(); // Number of threads
+            const int32_t numThreads = omp_get_num_threads();   // Number of threads
             std::cout << "  Using " << numThreads << " thread(s)\n\n";
             std::cout << "  Have patience! Computing..";
             omp_set_num_threads(numThreads);
@@ -214,7 +210,10 @@ int32_t main(int32_t argc, char** argv)
             /** Using Black Scholes model to get stock price every iteration
                 Returns data as a column vector having rows=timeSteps  **/
             for (int32_t j = 0; j < inLoops; j++)
+            {
+                static constexpr float riskRate = 0.001f;   // Risk free interest rate (%)
                 stock[j] = runBlackScholesModel(spotPrice, timeSteps, riskRate, volatility);
+            }
 
             // Stores average of all estimated stock-price arrays
             avgStock[i] = find2dMean(stock, inLoops, timeSteps);
@@ -223,6 +222,7 @@ int32_t main(int32_t argc, char** argv)
     }
 
     // Average of all the average arrays
+    float *optStock = new float[timeSteps];     // Vector for most likely outcome stock price
     optStock = find2dMean(avgStock, outLoops, timeSteps);
 
     // Write optimal outcome to disk
