@@ -46,7 +46,7 @@
 //----------------------------------------------------------------------------
 // Calculates volatility from data.csv file
 //----------------------------------------------------------------------------
-float calculateVolatility(float spotPrice, int timeSteps)
+float calculateVolatility(float spotPrice, int32_t timeSteps)
 {
     // Open data.csv in read-mode, exit on fail
     std::ifstream filePtr;
@@ -67,7 +67,7 @@ float calculateVolatility(float spotPrice, int timeSteps)
     }
     filePtr.close();
 
-    int i = 0, len = timeSteps - 1;
+    int32_t i = 0, len = timeSteps - 1;
     std::unique_ptr<float[]> priceArr = std::make_unique<float[]>(timeSteps - 1);
     std::istringstream iss(line);
     std::string token;
@@ -97,13 +97,13 @@ float calculateVolatility(float spotPrice, int timeSteps)
     Finds mean of a 2D array across first index (inLoops)
     M is in/outLoops and N is timeSteps
 ----------------------------------------------------------------------------*/
-float* find2dMean(float** matrix, int numLoops, int timeSteps)
+float* find2dMean(float** matrix, int32_t numLoops, int32_t timeSteps)
 {
-    int j;
+    int32_t j;
     float* avg = new float[timeSteps];
     float sum = 0.0f;
 
-    for (int i = 0; i < timeSteps; i++)
+    for (int32_t i = 0; i < timeSteps; i++)
     {
         /** A private copy of 'sum' variable is created for each thread.
             At the end of the reduction, the reduction variable is applied to
@@ -130,7 +130,7 @@ float* find2dMean(float** matrix, int numLoops, int timeSteps)
 float genRand(float mean, float stdDev)
 {
     auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    std::default_random_engine generator(static_cast<unsigned int>(seed));
+    std::default_random_engine generator(static_cast<uint32_t>(seed));
     std::normal_distribution<float> distribution(mean, stdDev);
     return distribution(generator);
 }
@@ -138,7 +138,7 @@ float genRand(float mean, float stdDev)
 //----------------------------------------------------------------------------
 // Simulates Black Scholes model
 //----------------------------------------------------------------------------
-float* runBlackScholesModel(float spotPrice, int timeSteps, float riskRate, float volatility)
+float* runBlackScholesModel(float spotPrice, int32_t timeSteps, float riskRate, float volatility)
 {
     float  mean = 0.0f, stdDev = 1.0f;                                             // Mean and standard deviation
     float  deltaT = 1.0f / timeSteps;                                              // Timestep
@@ -147,11 +147,11 @@ float* runBlackScholesModel(float spotPrice, int timeSteps, float riskRate, floa
     stockPrice[0] = spotPrice;                                                    // Stock price at t=0 is spot price
 
     // Populate array with random nos.
-    for (int i = 0; i < timeSteps - 1; i++)
+    for (int32_t i = 0; i < timeSteps - 1; i++)
         normRand[i] = genRand(mean, stdDev);
 
     // Apply Black Scholes equation to calculate stock price at next timestep
-    for (int i = 0; i < timeSteps - 1; i++)
+    for (int32_t i = 0; i < timeSteps - 1; i++)
         stockPrice[i + 1] = stockPrice[i] * exp(((riskRate - (powf(volatility, 2.0f) / 2.0f)) * deltaT) + (volatility * normRand[i] * sqrtf(deltaT)));
 
     return stockPrice;
@@ -160,22 +160,22 @@ float* runBlackScholesModel(float spotPrice, int timeSteps, float riskRate, floa
 //----------------------------------------------------------------------------
 // Main function
 //----------------------------------------------------------------------------
-int main(int argc, char** argv)
+int32_t main(int32_t argc, char** argv)
 {
     const auto beginTime = std::chrono::system_clock::now();
 
-    int inLoops = 100;     // Inner loop iterations
-    int outLoops = 10000;  // Outer loop iterations
-    int timeSteps = 180;   // Stock market time-intervals (min)
+    int32_t inLoops = 100;     // Inner loop iterations
+    int32_t outLoops = 10000;  // Outer loop iterations
+    int32_t timeSteps = 180;   // Stock market time-intervals (min)
 
     // Matrix for stock-price vectors per iteration
     float** stock = new float* [inLoops];
-    for (int i = 0; i < inLoops; i++)
+    for (int32_t i = 0; i < inLoops; i++)
         stock[i] = new float[timeSteps];
 
     // Matrix for mean of stock-price vectors per iteration
     float** avgStock = new float* [outLoops];
-    for (int i = 0; i < outLoops; i++)
+    for (int32_t i = 0; i < outLoops; i++)
         avgStock[i] = new float[timeSteps];
 
     // Vector for most likely outcome stock price
@@ -192,14 +192,14 @@ int main(int argc, char** argv)
     std::cout << "  Copyright (c) 2017-2023 Rajdeep Konwar\n\n";
     std::cout << "  Using market volatility = " << volatility << std::endl;
 
-    int i;
+    int32_t i;
     // Parallel region with each thread having its own instance of variable 'i',
 #pragma omp parallel private(i)
     {
         // Only one thread (irrespective of thread id) handles this region
 #pragma omp single
         {
-            int numThreads = omp_get_num_threads(); // Number of threads
+            int32_t numThreads = omp_get_num_threads(); // Number of threads
             std::cout << "  Using " << numThreads << " thread(s)\n\n";
             std::cout << "  Have patience! Computing..";
             omp_set_num_threads(numThreads);
@@ -213,7 +213,7 @@ int main(int argc, char** argv)
         {
             /** Using Black Scholes model to get stock price every iteration
                 Returns data as a column vector having rows=timeSteps  **/
-            for (int j = 0; j < inLoops; j++)
+            for (int32_t j = 0; j < inLoops; j++)
                 stock[j] = runBlackScholesModel(spotPrice, timeSteps, riskRate, volatility);
 
             // Stores average of all estimated stock-price arrays
