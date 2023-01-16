@@ -34,6 +34,7 @@
 
 // Header files
 #include <chrono>
+#include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -162,7 +163,7 @@ float* run_black_scholes_model(float spot_price, int time_steps, float risk_rate
 //----------------------------------------------------------------------------
 int main(int argc, char** argv)
 {
-    clock_t t = clock();
+    const auto beginTime = std::chrono::system_clock::now();
 
     int in_loops = 100;     // Inner loop iterations
     int out_loops = 10000;  // Outer loop iterations
@@ -248,8 +249,6 @@ int main(int argc, char** argv)
 
     delete[] opt_stock;
 
-    t = clock() - t;
-    std::cout << " done!\n  Time taken = " << static_cast<float>(t / CLOCKS_PER_SEC) << "s";
-
+    std::cout << " done!\n  Time taken = " << std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - beginTime).count()) << "s";
     return getchar();
 }
