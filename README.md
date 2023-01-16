@@ -32,7 +32,7 @@ Then run the program
 ./stockast
 ```
 
-![image](https://user-images.githubusercontent.com/22571164/212605729-d5e8b530-f06b-40db-a6e3-66beadabbd1e.png)
+![image](https://user-images.githubusercontent.com/22571164/212611578-cec8eecf-a858-467d-967b-79315ea33d60.png)
 
 ### General info
 * The input file "data.csv" contains the stock-price values for 3 hours prior to run-time; this acts as the history-data and helps estimate the market volatility.

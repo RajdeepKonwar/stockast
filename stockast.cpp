@@ -184,9 +184,11 @@ int32_t main(int32_t argc, char** argv)
     const float volatility = calculateVolatility(spotPrice, timeSteps);
 
     // Welcome message
-    std::cout << "--Welcome to Stockast: Stock Forecasting Tool--\n";
-    std::cout << "  Copyright (c) 2017-2023 Rajdeep Konwar\n\n";
-    std::cout << "  Using market volatility = " << volatility << std::endl;
+    std::cout << "==============================================\n";
+    std::cout << "      Stockast - Stock Forecasting Tool\n";
+    std::cout << "    Copyright (c) 2017-2023 Rajdeep Konwar\n";
+    std::cout << "==============================================\n\n";
+    std::cout << "Using market volatility: " << volatility << "\n";
 
     int32_t i;
     // Parallel region with each thread having its own instance of variable 'i',
@@ -196,8 +198,8 @@ int32_t main(int32_t argc, char** argv)
 #pragma omp single
         {
             const int32_t numThreads = omp_get_num_threads();   // Number of threads
-            std::cout << "  Using " << numThreads << " thread(s)\n\n";
-            std::cout << "  Have patience! Computing..";
+            std::cout << "Using " << numThreads << " thread(s)\n\n";
+            std::cout << "Have patience! Computing.. ";
             omp_set_num_threads(numThreads);
         }
 
@@ -248,6 +250,6 @@ int32_t main(int32_t argc, char** argv)
 
     delete[] optStock;
 
-    std::cout << " done!\n  Time taken = " << std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - beginTime).count()) << "s";
+    std::cout << "done!\nTime taken: " << std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - beginTime).count()) << "s";
     return std::getchar();
 }
