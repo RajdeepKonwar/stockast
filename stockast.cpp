@@ -32,8 +32,8 @@
 * riskless asset is constant and thus called the risk-free interest rate.
 **/
 
-// Header files
 #include <chrono>
+#include <cmath>
 #include <cstdio>
 #include <fstream>
 #include <iostream>
@@ -83,11 +83,11 @@ float calculateVolatility(float spotPrice, int32_t timeSteps)
     float meanPrice = sum / (len + 1);
 
     // Calculate market volatility as standard deviation
-    sum = powf((spotPrice - meanPrice), 2.0f);
+    sum = std::powf((spotPrice - meanPrice), 2.0f);
     for (i = 0; i < len; i++)
-        sum += powf((priceArr[i] - meanPrice), 2.0f);
+        sum += std::powf((priceArr[i] - meanPrice), 2.0f);
 
-    float stdDev = sqrtf(sum);
+    float stdDev = std::sqrtf(sum);
 
     // Return as percentage
     return stdDev / 100.0f;
@@ -152,7 +152,7 @@ float* runBlackScholesModel(float spotPrice, int32_t timeSteps, float riskRate, 
 
     // Apply Black Scholes equation to calculate stock price at next timestep
     for (int32_t i = 0; i < timeSteps - 1; i++)
-        stockPrice[i + 1] = stockPrice[i] * exp(((riskRate - (powf(volatility, 2.0f) / 2.0f)) * deltaT) + (volatility * normRand[i] * sqrtf(deltaT)));
+        stockPrice[i + 1] = stockPrice[i] * exp(((riskRate - (std::powf(volatility, 2.0f) / 2.0f)) * deltaT) + (volatility * normRand[i] * std::sqrtf(deltaT)));
 
     return stockPrice;
 }
@@ -249,5 +249,5 @@ int32_t main(int32_t argc, char** argv)
     delete[] optStock;
 
     std::cout << " done!\n  Time taken = " << std::to_string(std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - beginTime).count()) << "s";
-    return getchar();
+    return std::getchar();
 }
